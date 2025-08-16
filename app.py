@@ -1,12 +1,11 @@
 import streamlit as st
 import json
 import logging
-from io import BytesIO
 from PIL import Image
-from ocr_service import OCRService
-from field_extractor import FieldExtractor
-from validator import DataValidator
-from config import Config
+from src.ocr_processor import OCRService
+from src.extractor import FieldExtractor
+from src.validate import DataValidator
+from config.config import Config
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -37,8 +36,9 @@ def init_services():
 def process_uploaded_file(uploaded_file):
     """Process the uploaded file and determine content type"""
     try:
-        file_bytes = uploaded_file.read()
 
+        file_bytes = uploaded_file.read()
+        print(f"Processing uploaded file: {uploaded_file.name}, Size: {len(file_bytes)}")
         # Determine content type
         if uploaded_file.type == "application/pdf":
             content_type = "application/pdf"
@@ -57,7 +57,7 @@ def process_uploaded_file(uploaded_file):
 
 def display_validation_results(validation_results):
     """Display validation results in a user-friendly format"""
-    st.subheader("📊 Validation Results")
+    st.subheader(" Validation Results")
 
     # Overall metrics
     col1, col2, col3 = st.columns(3)
@@ -98,9 +98,11 @@ def display_validation_results(validation_results):
 def display_extracted_data(data):
     """Display extracted data in a structured format"""
     st.subheader("📄 Extracted Information")
-
+    logger.info("Displaying extracted data")
+    if not data:
+        logger.warning("No data to display")
     # Personal Information
-    with st.expander("👤 Personal Information", expanded=True):
+    with st.expander(" Personal Information", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
             st.write(f"**First Name:** {data.get('firstName', 'N/A')}")
@@ -172,11 +174,11 @@ def main():
         ocr_service, field_extractor, validator, error = init_services()
 
     if error:
-        st.error(f"❌ Initialization Error: {error}")
+        st.error(f" Initialization Error: {error}")
         st.info("Please check your environment variables and Azure credentials.")
         return
 
-    st.success("✅ Services initialized successfully!")
+    st.success(" Services initialized successfully!")
 
     # File upload
     st.subheader("📎 Upload Document")
@@ -188,49 +190,39 @@ def main():
 
     if uploaded_file is not None:
         # Display file information
-        st.info(f"📄 **File:** {uploaded_file.name} ({uploaded_file.size} bytes)")
+        st.info(f" **File:** {uploaded_file.name} ({uploaded_file.size} bytes)")
 
         # Show image preview for image files
         if uploaded_file.type.startswith('image/'):
             try:
                 image = Image.open(uploaded_file)
-                st.image(image, caption="Uploaded Image", use_column_width=True)
+                st.image(image, caption="Uploaded Image", width=900)
                 uploaded_file.seek(0)  # Reset file pointer
             except Exception as e:
                 st.warning(f"Could not display image preview: {str(e)}")
 
         # Process button
-        if st.button("🚀 Extract Information", type="primary"):
+        if st.button(" Extract Information", type="primary"):
             try:
                 # Process the file
                 with st.spinner("Processing uploaded file..."):
                     file_bytes, content_type = process_uploaded_file(uploaded_file)
 
                 # Step 1: OCR Processing
-                with st.spinner("🔍 Extracting text using OCR..."):
+                with st.spinner(" Extracting text using OCR..."):
                     ocr_result = ocr_service.extract_text_from_document(file_bytes, content_type)
-                    st.success(f"✅ OCR completed! Extracted {len(ocr_result.get('full_text', ''))} characters")
+                    text_for_llm = ocr_service.get_content_as_str(ocr_result)
 
-                # Show OCR summary
-                with st.expander("🔍 OCR Analysis Summary"):
-                    summary = ocr_service.get_text_summary(ocr_result)
-                    st.text(summary)
-
-                    # Show extracted text (truncated)
-                    full_text = ocr_result.get('full_text', '')
-                    if full_text:
-                        st.write("**Extracted Text (first 500 characters):**")
-                        st.text(full_text[:500] + "..." if len(full_text) > 500 else full_text)
 
                 # Step 2: Field Extraction
-                with st.spinner("🤖 Extracting structured fields using AI..."):
-                    extracted_data = field_extractor.extract_fields(ocr_result)
-                    st.success("✅ Field extraction completed!")
+                with st.spinner(" Extracting structured fields using AI..."):
+                    extracted_data = field_extractor.extract_fields(text_for_llm)
+                    st.success(" Field extraction completed!")
 
                 # Step 3: Validation
                 with st.spinner("🔍 Validating extracted data..."):
                     validation_results = validator.validate_extracted_data(extracted_data)
-                    st.success("✅ Validation completed!")
+                    st.success(" Validation completed!")
 
                 # Display results
                 col1, col2 = st.columns([2, 1])

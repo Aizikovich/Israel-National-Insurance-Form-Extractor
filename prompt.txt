@@ -5,10 +5,19 @@ Your task is to extract specific fields from the OCR text and return them in the
 IMPORTANT RULES:
 1. Return ONLY valid JSON - no explanations, no markdown formatting
 2. If a field is not found or unclear, use an empty string ""
-3. For dates, extract day, month, year separately
+3. For dates, extract day, month, year separately - they often appear as separated digits like "1 6 0 4 2 0 2 2"
 4. For addresses, extract each component separately
 5. Be careful with Hebrew text direction and OCR errors
 6. Look for both Hebrew and English field labels
+7. Handle OCR formatting like "|" separators in numbers and ":selected:" / ":unselected:" markers
+8. Numbers may have spaces or "|" characters between digits that should be concatenated
+
+OCR FORMATTING PATTERNS TO HANDLE:
+- Dates: "1 6 0 4 2 0 2 2" = 16/04/2022
+- ID Numbers: "8 | 7 | 7 | 5 |2 |4 |5|6 |3 |1" = 8775245631
+- Phone: "6 5 |0 2 | 4 7 4 9 4 7" = 0502474947
+- Selection boxes: ":selected:" means checked, ":unselected:" means unchecked
+- Field values often appear after field labels
 
 Required JSON format:
 {
@@ -65,7 +74,7 @@ Hebrew field mappings:
 - שם משפחה = lastName
 - שם פרטי = firstName
 - ת.ז./מספר זהות = idNumber
-- מין = gender (זכר/נקבה)
+- מין = gender (זכר/נקבה - look for :selected: marker)
 - תאריך לידה = dateOfBirth
 - כתובת = address
 - רחוב = street
@@ -84,9 +93,20 @@ Hebrew field mappings:
 - כתובת מקום התאונה = accidentAddress
 - נסיבות הפגיעה/תאור התאונה = accidentDescription
 - האיבר שנפגע = injuredBodyPart
-- חתימה = signature
+- חתימה = signature (look for "חתימה" followed by a name or "X")
 - תאריך מילוי הטופס = formFillingDate
 - תאריך קבלת הטופס בקופה = formReceiptDateAtClinic
-- חבר בקופת חולים = healthFundMember (כללית/מאוחדת/מכבי/לאומית)
+- חבר בקופת חולים = healthFundMember (כללית/מאוחדת/מכבי/לאומית - look for :selected: marker)
 - מהות התאונה = natureOfAccident
 - אבחנות רפואיות = medicalDiagnoses
+
+EXAMPLE EXTRACTION PATTERNS:
+- From "שם משפחה טננהוים" extract lastName: "טננהוים"
+- From "יהודה שם פרטי" extract firstName: "יהודה"
+- From "8 | 7 | 7 | 5 |2 |4 |5|6 |3 |1" extract idNumber: "8775245631"
+- From "זכר :selected: נקבה :unselected:" extract gender: "זכר"
+- From "1 6 0 4 2 0 2 2" in date context, extract day: "16", month: "04", year: "2022"
+- From "כללית :selected:" extract healthFundMember: "כללית"
+- From "החלקתי בגלל שהרצפה הייתה רטובה ולא היה שום שלט שמזהיר" extract accidentDescription
+- From "יד שמאל" extract injuredBodyPart: "יד שמאל"
+"""

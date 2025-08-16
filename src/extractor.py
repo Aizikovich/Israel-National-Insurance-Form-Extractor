@@ -1,7 +1,7 @@
 import json
 import logging
 from openai import AzureOpenAI
-from config import Config
+from config.config import Config
 
 
 class FieldExtractor:
@@ -21,19 +21,11 @@ class FieldExtractor:
 
     def get_extraction_prompt(self):
         """Get the system prompt for field extraction"""
-        with open("prompt.txt", "r") as file:
-            return file.read().strip()
+        with open("prompt.txt", "r", encoding="utf-8") as file:
+            prompt = file.read()
+        return prompt.strip()
 
     def extract_fields(self, ocr_text):
-        """
-        Extract structured fields from OCR text using Azure OpenAI
-
-        Args:
-            ocr_text: Raw text extracted from OCR
-
-        Returns:
-            dict: Structured data in the required format
-        """
         try:
             # Prepare the text for extraction
             if isinstance(ocr_text, dict):
@@ -82,7 +74,7 @@ class FieldExtractor:
             return self._get_empty_structure()
 
     def _get_empty_structure(self):
-        """Return empty structure matching the required format"""
+
         return {
             "lastName": "",
             "firstName": "",

@@ -5,7 +5,7 @@ from azure.core.credentials import AzureKeyCredential
 
 
 def get_prompt():
-    with open("prompt.txt", "r", encoding="utf-8-sig") as file:
+    with open("../prompt.txt", "r", encoding="utf-8-sig") as file:
         return file.read().strip()
 
 
@@ -101,7 +101,7 @@ def test_ocr_connection():
     )
     print("✅ OCR Service initialized successfully")
     logging.info("OCR Service initialized successfully")
-    file_path = "eval/sample.pdf"
+    file_path = "../eval/sample.pdf"
 
     with open(file_path, "rb") as f:
         print(f"file type: {f.name.split('.')[-1]}")

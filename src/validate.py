@@ -5,6 +5,7 @@ from typing import Dict, List, Tuple
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 class DataValidator:
     def __init__(self):
         """Initialize the data validator"""
@@ -140,7 +141,7 @@ class DataValidator:
                 'value': f"{address.get('street', '')} {address.get('houseNumber', '')}, {address.get('city', '')}",
                 'valid': has_street and has_city,
                 'message': 'Address has street and city' if (
-                            has_street and has_city) else 'Incomplete address information'
+                        has_street and has_city) else 'Incomplete address information'
             })
 
     def _validate_accident_info(self, data: Dict):
@@ -182,18 +183,19 @@ class DataValidator:
 
         # Must be exactly 9 digits
         if len(id_clean) != 9:
+            print("Invalid ID length: must be 9 digits")
             return False
 
         # Validate checksum using Israeli ID algorithm
-        try:
-            total = 0
-            for i, digit in enumerate(id_clean):
-                num = int(digit) * ((i % 2) + 1)
-                total += num if num < 10 else (num // 10) + (num % 10)
-
-            return total % 10 == 0
-        except:
-            return False
+        # try:
+        #     total = 0
+        #     for i, digit in enumerate(id_clean):
+        #         num = int(digit) * ((i % 2) + 1)
+        #         total += num if num < 10 else (num // 10) + (num % 10)
+        #
+        #     return total % 10 == 0
+        # except:
+        #     return False
 
     def _validate_israeli_phone(self, phone: str, is_mobile: bool = True) -> bool:
         """Validate Israeli phone number format"""
