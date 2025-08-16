@@ -71,8 +71,8 @@ The application extracts the following fields from insurance forms:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd <repository-name>
+   git clone https://github.com/Aizikovich/Israel-National-Insurance-Form-Extractor.git
+   cd Israel-National-Insurance-Form-Extractor
    ```
 
 2. **Create a virtual environment**
