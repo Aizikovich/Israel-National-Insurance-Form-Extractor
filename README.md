@@ -94,13 +94,11 @@ A Streamlit-based application that extracts structured data from Israeli Nationa
 ├── .env                           # Environment variables (create this)
 ├── config/
 │   └── config.py                  # Configuration management
-├── src/
-│   ├── ocr_processor.py           # Azure Document Intelligence integration
-│   ├── extractor.py               # OpenAI field extraction
-│   └── validate.py                # Data validation logic
-└── tests/
-    ├── test.py                    # Connection and service tests
-    └── pipeline.py                # Pipeline testing utilities
+|── src/
+    ├── ocr_processor.py           # Azure Document Intelligence integration
+    ├── extractor.py               # OpenAI field extraction
+    └── validate.py                # Data validation logic
+ 
 ```
 
 ## Configuration
@@ -129,17 +127,6 @@ All configuration is managed through environment variables in the `.env` file:
 | `AZURE_OPENAI_VERSION` | Azure OpenAI API version | No (default: 2024-02-01) |
 | `AZURE_OPENAI_DEPLOYMENT_NAME` | GPT-4 deployment name | No (default: gpt-4o) |
 
-## Testing
-
-Run the test suite to verify your setup:
-
-```bash
-# Test Azure connections
-python tests/test.py
-
-# Test the complete pipeline
-python tests/pipeline.py
-```
 
 ## Data Validation
 
@@ -169,9 +156,6 @@ The application includes comprehensive validation for:
    - Verify your GPT-4 deployment name is correct
    - Monitor token usage and limits
 
-### Environment Status Check
-
-The application includes an environment status checker in the web interface. Access it through the "Environment Status" expandable section to verify your configuration.
 
 ## Extracted Information
 
