@@ -6,6 +6,7 @@ from config.config import Config
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 class FieldExtractor:
     def __init__(self):
         """Initialize the field extractor with Azure OpenAI"""

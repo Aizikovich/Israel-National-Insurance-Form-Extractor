@@ -33,7 +33,7 @@ A Streamlit-based application that extracts structured data from Israeli Nationa
    cd Israel-National-Insurance-Form-Extractor
    ```
 
-2. **Create a virtual environment**
+2. **Create an environment**
    ```bash
    conda create -n nie python=3.11
    conda activate nie
@@ -68,7 +68,7 @@ A Streamlit-based application that extracts structured data from Israeli Nationa
    python run.py
    ```
 
-2. **Using Streamlit directly**
+2. ** Or you can use Streamlit directly**
    ```bash
    streamlit run app.py
    ```
