@@ -3,6 +3,8 @@ import logging
 from openai import AzureOpenAI
 from config.config import Config
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class FieldExtractor:
     def __init__(self):
@@ -14,9 +16,9 @@ class FieldExtractor:
                 api_version=Config.AZURE_OPENAI_VERSION,
                 azure_endpoint=Config.AZURE_OPENAI_ENDPOINT
             )
-            logging.info("Field Extractor initialized successfully")
+            logger.info("Field Extractor initialized successfully")
         except Exception as e:
-            logging.error(f"Failed to initialize Field Extractor: {str(e)}")
+            logger.error(f"Failed to initialize Field Extractor: {str(e)}")
             raise
 
     def get_extraction_prompt(self):
@@ -27,6 +29,7 @@ class FieldExtractor:
 
     def extract_fields(self, ocr_text):
         try:
+            logger.info("Starting field extraction from OCR text")
             # Prepare the text for extraction
             if isinstance(ocr_text, dict):
                 text_to_process = ocr_text.get('full_text', '')
@@ -38,6 +41,7 @@ class FieldExtractor:
 
             # Truncate text if too long (GPT-4 token limit consideration)
             if len(text_to_process) > 8000:
+                logger.warning("OCR text truncated due to length limitations")
                 text_to_process = text_to_process[:8000] + "..."
 
             response = self.client.chat.completions.create(
@@ -60,6 +64,7 @@ class FieldExtractor:
                 response_text = response_text[3:-3]
 
             # Parse JSON
+            logger.debug("Parsing JSON response from OpenAI")
             try:
                 extracted_data = json.loads(response_text)
                 logging.info("Successfully extracted fields from OCR text")

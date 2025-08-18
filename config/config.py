@@ -1,6 +1,9 @@
 import os
 from dotenv import load_dotenv
+import logging
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 
@@ -33,7 +36,7 @@ class Config:
         for var in required_vars:
             if not getattr(cls, var):
                 missing_vars.append(var)
-
+        logger.info("Configuration validation completed successfully")
         if missing_vars:
             raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 

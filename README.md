@@ -8,57 +8,15 @@ A Streamlit-based application that extracts structured data from Israeli Nationa
 - **AI-Powered Field Extraction**: Leverages Azure OpenAI GPT-4 to intelligently extract structured information
 - **Data Validation**: Comprehensive validation of extracted data including Israeli ID format, phone numbers, and dates
 - **Multi-language Support**: Handles both Hebrew and English forms
-- **Interactive Web Interface**: User-friendly Streamlit interface for file upload and results display
+- **Interactive user Interface**: User-friendly Streamlit interface for file upload and results display
 - **JSON Export**: Download extracted data in structured JSON format
 
 ## Supported File Formats
 
 - PDF
 - JPEG/JPG
-- PNG
 
-## Extracted Information
 
-The application extracts the following fields from insurance forms:
-
-### Personal Information
-- First Name (שם פרטי)
-- Last Name (שם משפחה)
-- ID Number (ת.ז.)
-- Gender (מין)
-- Date of Birth (תאריך לידה)
-
-### Address Information
-- Street (רחוב)
-- House Number (מספר בית)
-- Entrance (כניסה)
-- Apartment (דירה)
-- City (יישוב)
-- Postal Code (מיקוד)
-- PO Box (תא דואר)
-
-### Contact Information
-- Landline Phone (טלפון קווי)
-- Mobile Phone (טלפון נייד)
-
-### Accident Information
-- Job Type (סוג העבודה)
-- Date of Injury (תאריך הפגיעה)
-- Time of Injury (שעת הפגיעה)
-- Accident Location (מקום התאונה)
-- Accident Address (כתובת מקום התאונה)
-- Accident Description (נסיבות הפגיעה)
-- Injured Body Part (האיבר שנפגע)
-
-### Form Information
-- Signature (חתימה)
-- Form Filling Date (תאריך מילוי הטופס)
-- Form Receipt Date at Clinic (תאריך קבלת הטופס בקופה)
-
-### Medical Institution Fields
-- Health Fund Member (חבר בקופת חולים)
-- Nature of Accident (מהות התאונה)
-- Medical Diagnoses (אבחנות רפואיות)
 
 ## Prerequisites
 
@@ -215,5 +173,47 @@ The application includes comprehensive validation for:
 
 The application includes an environment status checker in the web interface. Access it through the "Environment Status" expandable section to verify your configuration.
 
+## Extracted Information
+
+The application extracts the following fields from insurance forms:
+
+### Personal Information
+- First Name (שם פרטי)
+- Last Name (שם משפחה)
+- ID Number (ת.ז.)
+- Gender (מין)
+- Date of Birth (תאריך לידה)
+
+### Address Information
+- Street (רחוב)
+- House Number (מספר בית)
+- Entrance (כניסה)
+- Apartment (דירה)
+- City (יישוב)
+- Postal Code (מיקוד)
+- PO Box (תא דואר)
+
+### Contact Information
+- Landline Phone (טלפון קווי)
+- Mobile Phone (טלפון נייד)
+
+### Accident Information
+- Job Type (סוג העבודה)
+- Date of Injury (תאריך הפגיעה)
+- Time of Injury (שעת הפגיעה)
+- Accident Location (מקום התאונה)
+- Accident Address (כתובת מקום התאונה)
+- Accident Description (נסיבות הפגיעה)
+- Injured Body Part (האיבר שנפגע)
+
+### Form Information
+- Signature (חתימה)
+- Form Filling Date (תאריך מילוי הטופס)
+- Form Receipt Date at Clinic (תאריך קבלת הטופס בקופה)
+
+### Medical Institution Fields
+- Health Fund Member (חבר בקופת חולים)
+- Nature of Accident (מהות התאונה)
+- Medical Diagnoses (אבחנות רפואיות)
 
  

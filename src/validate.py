@@ -3,8 +3,9 @@ import logging
 from datetime import datetime
 from typing import Dict, List, Tuple
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class DataValidator:
     def __init__(self):
@@ -22,7 +23,7 @@ class DataValidator:
             dict: Validation results with scores and issues
         """
         self.validation_results = []
-
+        logger.info("Starting data validation")
         # Validate each field type
         self._validate_personal_info(data)
         self._validate_dates(data)
@@ -33,7 +34,7 @@ class DataValidator:
         total_checks = len(self.validation_results)
         passed_checks = sum(1 for result in self.validation_results if result['valid'])
         overall_score = (passed_checks / total_checks * 100) if total_checks > 0 else 0
-
+        logger.info(f"Validation completed - Overall score: {overall_score}%, Passed: {passed_checks}/{total_checks}")
         return {
             "overall_score": round(overall_score, 2),
             "total_checks": total_checks,

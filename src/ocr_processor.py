@@ -3,8 +3,8 @@ from azure.ai.documentintelligence import DocumentIntelligenceClient
 from azure.core.credentials import AzureKeyCredential
 from config.config import Config
 
-
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 class OCRService:
@@ -20,6 +20,7 @@ class OCRService:
         except Exception as e:
             logging.error(f"Failed to initialize OCR Service: {str(e)}")
             raise
+        logger.info("Azure Document Intelligence client initialized")
 
     def extract_text_from_document(self, file_bytes, content_type="application/pdf"):
         """
@@ -32,7 +33,7 @@ class OCRService:
         Returns:
             dict: Extracted text and metadata
         """
-
+        logger.info(f"Starting OCR extraction for document type: {content_type}")
         try:
             # Analyze document using the layout model
             poller = self.client.begin_analyze_document(
@@ -43,6 +44,7 @@ class OCRService:
             )
 
             result = poller.result()
+            logger.info("OCR extraction completed successfully")
             return result
 
         except Exception as e:
@@ -50,6 +52,7 @@ class OCRService:
             raise
 
     def get_content_as_str(self, ocr_result) -> str:
+        logger.debug("Converting OCR result to string format")
         all_para = [para.content for para in ocr_result['paragraphs']]
         all_pages = [l.content for p in ocr_result['pages'] for l in p.lines]
         # {set(all_para) - set(all_pages)}")
